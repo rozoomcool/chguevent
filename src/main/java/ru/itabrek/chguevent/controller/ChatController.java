@@ -1,16 +1,20 @@
 package ru.itabrek.chguevent.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.itabrek.chguevent.entity.ChatMessage;
 import ru.itabrek.chguevent.entity.ChatNotification;
 import ru.itabrek.chguevent.service.ChatMessageService;
 import ru.itabrek.chguevent.service.ChatRoomService;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
@@ -32,4 +36,11 @@ public class ChatController {
                         saved.getSenderId(),
                         saved.getSenderName()));
     }
+
+    @MessageMapping("/application")
+    @SendTo("/all/messages")
+    public Message send(final Message message) throws Exception {
+        return message;
+    }
+
 }
