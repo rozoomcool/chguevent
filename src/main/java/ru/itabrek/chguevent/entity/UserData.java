@@ -24,6 +24,8 @@ public class UserData {
     private String phone;
     @Column(name = "age")
     private int age;
+    @Column(name = "user_avatar")
+    private String userAvatar;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "user_id")

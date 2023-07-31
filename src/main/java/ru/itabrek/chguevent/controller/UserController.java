@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.itabrek.chguevent.entity.User;
 import ru.itabrek.chguevent.exception.UserAlreadyExistException;
 import ru.itabrek.chguevent.exception.UserNotFoundException;
+import ru.itabrek.chguevent.model.UserModel;
 import ru.itabrek.chguevent.service.UserDataService;
 import ru.itabrek.chguevent.service.UserService;
 
@@ -20,6 +21,17 @@ public class UserController {
     public ResponseEntity getUser(@RequestAttribute User user){
         try{
             return ResponseEntity.ok(userService.findById(user.getId()));
+        } catch (UserNotFoundException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body("Error");
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity getUserById(@PathVariable Long id){
+        try{
+            return ResponseEntity.ok(new UserModel(userService.findById(id)));
         } catch (UserNotFoundException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

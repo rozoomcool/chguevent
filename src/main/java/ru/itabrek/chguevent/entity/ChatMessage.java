@@ -7,7 +7,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "chat_messages")
-@Data
+@Getter
+@Setter
 @ToString
 @Builder
 @AllArgsConstructor

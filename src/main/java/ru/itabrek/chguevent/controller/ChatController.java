@@ -37,8 +37,8 @@ public class ChatController {
                         saved.getSenderName()));
     }
 
-    @MessageMapping("/application")
-    @SendTo("/all/messages")
+    @MessageMapping("/chat.send")
+    @SendTo("/topic/public")
     public Message send(final Message message) throws Exception {
         return message;
     }

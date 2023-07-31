@@ -7,11 +7,15 @@ import ru.itabrek.chguevent.entity.UserData;
 import ru.itabrek.chguevent.exception.UserNotFoundException;
 import ru.itabrek.chguevent.repo.UserDataRepo;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class UserDataService {
 
     private final UserDataRepo userDataRepo;
+    private final UserAvatarService userAvatarService;
+    private final UserService userService;
 
     public void create(User user, UserData dataRequest){
         if(!userDataRepo.existsByUser(user)) {
@@ -44,6 +48,15 @@ public class UserDataService {
         userDataRepo.save(dataToUpdate);
     }
 
+    public void uploadUserAvatar(Long userId, byte[] userAvatar) throws UserNotFoundException, IOException {
+        UserData userData = findByUser(userId);
 
+        if(userData.getUserAvatar() != null){
+            userAvatarService.deleteAvatar(userData.getUserAvatar());
+        }
+
+        String fileName = userAvatarService.saveAvatar(userAvatar);
+        userDataRepo.updateUserAvatarByUser(fileName, userService.findById(userId));
+    }
 
 }
