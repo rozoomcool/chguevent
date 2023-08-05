@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.itabrek.chguevent.entity.User;
 import ru.itabrek.chguevent.entity.UserData;
 import ru.itabrek.chguevent.exception.UserNotFoundException;
+import ru.itabrek.chguevent.service.UserAvatarService;
 import ru.itabrek.chguevent.service.UserDataService;
 
 @RestController
@@ -15,6 +16,7 @@ import ru.itabrek.chguevent.service.UserDataService;
 public class UserDataController {
 
     private final UserDataService userDataService;
+    private final UserAvatarService userAvatarService;
     @GetMapping
     public ResponseEntity getUserData(@RequestAttribute User user){
         try{
@@ -54,6 +56,15 @@ public class UserDataController {
         try{
             userDataService.uploadUserAvatar(user.getId(), file.getBytes());
             return ResponseEntity.ok().build();
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/avatar")
+    public ResponseEntity getUserAvatar(@RequestAttribute User user){
+        try{
+            return ResponseEntity.ok(userAvatarService.findAvatar(userDataService.findByUser(user.getId()).getUserAvatar()));
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
